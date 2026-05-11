@@ -10,15 +10,27 @@
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh;padding:28px 16px}
 .wrap{max-width:920px;margin:0 auto}
 
-/* Header */
 .header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:12px;flex-wrap:wrap}
 .header-left h1{font-size:22px;font-weight:700;color:#0f172a}
 .header-left p{font-size:13px;color:#64748b;margin-top:5px}
-.header-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+
+.sync-pill{display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 12px;border-radius:20px;border:1px solid #e2e8f0;background:#fff;transition:all .3s;cursor:default;white-space:nowrap}
+.sync-pill.idle   {color:#94a3b8;border-color:#e2e8f0}
+.sync-pill.syncing{color:#3b82f6;border-color:#bfdbfe;background:#eff6ff}
+.sync-pill.synced {color:#16a34a;border-color:#bbf7d0;background:#f0fdf4}
+.sync-pill.offline{color:#94a3b8;border-color:#e2e8f0;background:#f8fafc}
+.sync-pill i{font-size:13px;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .9s linear infinite;display:inline-block}
+
+.btn-retry{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:5px 10px;font-size:11px;color:#94a3b8;cursor:pointer;transition:all .15s;display:none}
+.btn-retry.show{display:block}
+.btn-retry:hover{border-color:#3b82f6;color:#3b82f6}
+
 .btn-reset{background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:7px 13px;font-size:12px;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
 .btn-reset:hover{border-color:#94a3b8;color:#334155}
 
-/* Stats */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .stat{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
 .stat-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
@@ -27,7 +39,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f4f
 .stat-val.warn{color:#d97706}
 .stat-val.sm{font-size:17px;padding-top:4px}
 
-/* Progress */
 .prog-card{background:#fff;border-radius:12px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
 .prog-row{display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:10px}
 .prog-row span:last-child{font-weight:600;color:#0f172a}
@@ -35,32 +46,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f4f
 .prog-fill{height:100%;background:linear-gradient(90deg,#15803d,#22c55e);border-radius:7px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
 .ticks{display:flex;justify-content:space-between;font-size:9px;color:#cbd5e1;padding:0 1px}
 
-/* Sync box */
-.sync-box{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.07);border-left:3px solid #3b82f6}
-.sync-box-head{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#1e40af;margin-bottom:12px}
-.sync-box-head i{font-size:16px}
-.sync-rows{display:flex;flex-direction:column;gap:10px}
-.sync-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.sync-row label{font-size:12px;color:#64748b;white-space:nowrap;min-width:100px}
-.sync-code-display{font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;background:#f1f5f9;padding:6px 10px;border-radius:6px;border:1px solid #e2e8f0;color:#0f172a;flex:1;word-break:break-all;min-width:0}
-.sync-input{font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;background:#fff;padding:6px 10px;border-radius:6px;border:1.5px solid #e2e8f0;color:#0f172a;flex:1;min-width:0;outline:none;transition:border-color .15s}
-.sync-input:focus{border-color:#3b82f6}
-.sync-input::placeholder{letter-spacing:0;color:#94a3b8;font-family:'Segoe UI',system-ui,sans-serif;font-size:12px}
-.btn-copy,.btn-apply{border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;border:1.5px solid;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:all .15s;flex-shrink:0}
-.btn-copy{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
-.btn-copy:hover{background:#dbeafe}
-.btn-copy.copied{background:#f0fdf4;border-color:#bbf7d0;color:#15803d}
-.btn-apply{background:#f0fdf4;border-color:#bbf7d0;color:#15803d}
-.btn-apply:hover{background:#dcfce7}
-.sync-hint{font-size:11px;color:#94a3b8;margin-top:4px}
-.sync-hint b{color:#64748b}
-
-/* Save status */
-.save-status{display:flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8;padding:4px 0}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.saving{animation:pulse .8s infinite}
-
-/* Week nav */
 .week-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .nav-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#475569;transition:all .15s;box-shadow:0 1px 2px rgba(0,0,0,.06);font-size:18px}
 .nav-btn:hover:not(:disabled){border-color:#16a34a;color:#16a34a;background:#f0fdf4}
@@ -69,11 +54,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f4f
 .wk-title h2{font-size:16px;font-weight:600;color:#0f172a}
 .wk-title p{font-size:12px;color:#94a3b8;margin-top:3px}
 
-/* Debt banner */
 .banner{display:none;background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#92400e;align-items:center;gap:8px}
 .banner i{font-size:16px;flex-shrink:0}
 
-/* Day grid */
 .dgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:24px}
 .dcard{background:#fff;border-radius:10px;padding:10px 8px 9px;border:2px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.07);transition:border-color .2s,box-shadow .2s;min-height:112px}
 .dcard.wknd{background:#f0fdf4}
@@ -95,7 +78,6 @@ button.dot.cu.on{background:#f59e0b;border-color:#f59e0b}
 .cu-tag{font-size:9px;color:#d97706;margin-left:3px}
 .dtimes{font-size:8px;color:#d1d5db;margin-top:3px;line-height:1.6}
 
-/* Rewards */
 .rwds{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
 .rwds h3{font-size:15px;font-weight:600;color:#0f172a;margin-bottom:14px}
 .rwds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
@@ -118,10 +100,13 @@ button.dot.cu.on{background:#f59e0b;border-color:#f59e0b}
     <p>127 aulas &nbsp;·&nbsp; 11 mai → 13 jun 2026 &nbsp;·&nbsp; 5 semanas</p>
   </div>
   <div class="header-right">
-    <div class="save-status" id="save-status">
-      <i class="ti ti-device-floppy" style="font-size:13px"></i>
-      <span id="save-text">carregando...</span>
+    <div class="sync-pill idle" id="sync-pill">
+      <i class="ti ti-cloud" id="sync-icon"></i>
+      <span id="sync-text">iniciando...</span>
     </div>
+    <button class="btn-retry" id="btn-retry" onclick="retrySync()">
+      <i class="ti ti-refresh" style="font-size:11px;vertical-align:-1px"></i> tentar de novo
+    </button>
     <button class="btn-reset" onclick="confirmReset()">
       <i class="ti ti-refresh"></i> Resetar
     </button>
@@ -149,47 +134,13 @@ button.dot.cu.on{background:#f59e0b;border-color:#f59e0b}
   <div class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span><span>127</span></div>
 </div>
 
-<!-- SYNC ENTRE DISPOSITIVOS -->
-<div class="sync-box">
-  <div class="sync-box-head">
-    <i class="ti ti-arrows-exchange"></i>
-    Sincronizar entre dispositivos da casa
-  </div>
-  <div class="sync-rows">
-    <div class="sync-row">
-      <label><i class="ti ti-code" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Seu código:</label>
-      <span class="sync-code-display" id="sync-code-display">carregando...</span>
-      <button class="btn-copy" id="btn-copy" onclick="copySyncCode()">
-        <i class="ti ti-copy"></i> Copiar
-      </button>
-    </div>
-    <div class="sync-row">
-      <label><i class="ti ti-download" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Importar:</label>
-      <input class="sync-input" id="sync-input" type="text" maxlength="40"
-        placeholder="Cole o código do outro dispositivo aqui...">
-      <button class="btn-apply" onclick="applySyncCode()">
-        <i class="ti ti-check"></i> Aplicar
-      </button>
-    </div>
-  </div>
-  <p class="sync-hint" style="margin-top:10px">
-    <b>Como funciona:</b> copie o código neste dispositivo → abra o arquivo no outro → cole e clique Aplicar.
-    O progresso maior sempre vence (nunca perde aulas marcadas).
-  </p>
-</div>
-
 <div class="week-nav">
   <button class="nav-btn" id="bp" onclick="chW(-1)"><i class="ti ti-chevron-left"></i></button>
-  <div class="wk-title">
-    <h2 id="wh"></h2>
-    <p id="wdesc"></p>
-  </div>
+  <div class="wk-title"><h2 id="wh"></h2><p id="wdesc"></p></div>
   <button class="nav-btn" id="bn" onclick="chW(1)"><i class="ti ti-chevron-right"></i></button>
 </div>
 
-<div id="dbn" class="banner">
-  <i class="ti ti-alert-triangle"></i><span id="dbt"></span>
-</div>
+<div id="dbn" class="banner"><i class="ti ti-alert-triangle"></i><span id="dbt"></span></div>
 
 <div id="dg" class="dgrid"></div>
 
@@ -198,9 +149,13 @@ button.dot.cu.on{background:#f59e0b;border-color:#f59e0b}
   <div id="rg" class="rwds-grid"></div>
 </div>
 
-</div><!-- .wrap -->
+</div>
 
 <script>
+// ─── NAMESPACE DO STORAGE ─────────────────────────────────────────────────────
+// ID único deste arquivo. Qualquer dispositivo com o mesmo IP lê/escreve aqui.
+const NS = 'crono127-v3-m4k9r2x7';
+
 // ─── DADOS ────────────────────────────────────────────────────────────────────
 const SCHED = [
   ['2026-05-11','Seg',3,['16:00','17:30','19:00']],
@@ -238,44 +193,53 @@ const SCHED = [
   ['2026-06-12','Sex',3,['17:00','18:30','20:00']],
   ['2026-06-13','Sáb',5,null],
 ];
-
-let c = 0;
-const DAYS = SCHED.map(([dt,dn,base,times]) => { const ls=c+1; c+=base; return {dt,dn,base,times,ls}; });
+let _c = 0;
+const DAYS = SCHED.map(([dt,dn,base,times]) => { const ls=_c+1; _c+=base; return {dt,dn,base,times,ls}; });
 const RWDS = [
-  {at:25,  icon:'ti-ball-football',    label:'Bola 30 min'},
-  {at:50,  icon:'ti-ball-football',    label:'Jogo completo'},
-  {at:75,  icon:'ti-device-gamepad-2', label:'Game night'},
-  {at:100, icon:'ti-pizza',            label:'Pizza + rolê'},
-  {at:127, icon:'ti-trophy',           label:'Recompensa épica'},
+  {at:25,icon:'ti-ball-football',label:'Bola 30 min'},
+  {at:50,icon:'ti-ball-football',label:'Jogo completo'},
+  {at:75,icon:'ti-device-gamepad-2',label:'Game night'},
+  {at:100,icon:'ti-pizza',label:'Pizza + rolê'},
+  {at:127,icon:'ti-trophy',label:'Recompensa épica'},
 ];
 
 // ─── ESTADO ───────────────────────────────────────────────────────────────────
-let done = new Array(DAYS.length).fill(0);
-let week = 0;
+let done     = new Array(DAYS.length).fill(0);
+let week     = 0;
+let publicIP = null;  // IP sanitizado: "186-232-45-12"
 
-// ─── COOKIE (365 dias) ────────────────────────────────────────────────────────
-function setCookie(val) {
-  const exp = new Date();
-  exp.setFullYear(exp.getFullYear() + 1);
-  document.cookie = `crono127=${encodeURIComponent(val)};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
-}
-function getCookie() {
-  const m = document.cookie.match(/(?:^|;\s*)crono127=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : null;
+// ─── UI DE SYNC ───────────────────────────────────────────────────────────────
+function setSyncUI(state, text) {
+  const pill = document.getElementById('sync-pill');
+  const icon = document.getElementById('sync-icon');
+  const retry = document.getElementById('btn-retry');
+  pill.className = 'sync-pill ' + state;
+  icon.className = 'ti ' + {
+    idle:    'ti-cloud',
+    syncing: 'ti-cloud-upload spin',
+    synced:  'ti-cloud-check',
+    offline: 'ti-wifi-off',
+  }[state];
+  document.getElementById('sync-text').textContent = text;
+  retry.className = 'btn-retry' + (state === 'offline' ? ' show' : '');
 }
 
-// ─── SALVAR / CARREGAR LOCAL ──────────────────────────────────────────────────
+// ─── PERSISTÊNCIA LOCAL (cookie 365 dias + localStorage) ─────────────────────
 function saveLocal() {
   const json = JSON.stringify(done);
   try { localStorage.setItem('crono127', json); } catch {}
-  setCookie(json);
-  setSaveStatus('saved');
+  const exp = new Date();
+  exp.setFullYear(exp.getFullYear() + 1);
+  document.cookie = `crono127=${encodeURIComponent(json)};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
 }
 
 function loadLocal() {
   let raw = null;
   try { raw = localStorage.getItem('crono127'); } catch {}
-  if (!raw) raw = getCookie();
+  if (!raw) {
+    const m = document.cookie.match(/(?:^|;\s*)crono127=([^;]*)/);
+    if (m) try { raw = decodeURIComponent(m[1]); } catch {}
+  }
   if (!raw) return;
   try {
     const arr = JSON.parse(raw);
@@ -283,82 +247,162 @@ function loadLocal() {
   } catch {}
 }
 
-function setSaveStatus(state) {
-  const el  = document.getElementById('save-status');
-  const txt = document.getElementById('save-text');
-  const ico = el.querySelector('i');
-  ico.className = 'ti ' + (state === 'saving' ? 'ti-loader saving' : 'ti-device-floppy');
-  ico.style.fontSize = '13px';
-  txt.textContent = state === 'saving' ? 'salvando...' : 'salvo localmente';
-  el.style.color = '#94a3b8';
-}
+// ─── DETECÇÃO DE IP PÚBLICO (5 serviços como fallback) ───────────────────────
+async function getPublicIP() {
+  const services = [
+    // [url, como extrair o IP da resposta JSON]
+    ['https://api64.ipify.org?format=json',     d => d.ip],
+    ['https://api.ipify.org?format=json',        d => d.ip],
+    ['https://ipapi.co/json/',                   d => d.ip],
+    ['https://freeipapi.com/api/json',           d => d.ipAddress],
+    ['https://api.bigdatacloud.net/data/client-ip', d => d.ipString],
+  ];
 
-// ─── SYNC CODE (cross-device) ─────────────────────────────────────────────────
-// Encoding: 34 chars, base-11 (0-9 = 0-9, a = 10)
-// Cada char = aulas feitas naquele dia. Compacto e legível.
-function encodeDone() {
-  return done.map(v => v.toString(11)).join('');
-}
-
-function decodeDone(code) {
-  if (!code || code.length < 5) return null;  // código inválido
-  const arr = new Array(DAYS.length).fill(0);
-  for (let i = 0; i < Math.min(code.length, DAYS.length); i++) {
-    const v = parseInt(code[i], 11);
-    if (!isNaN(v)) arr[i] = v;
+  for (const [url, extract] of services) {
+    try {
+      const ctrl = new AbortController();
+      const t    = setTimeout(() => ctrl.abort(), 4000);
+      const r    = await fetch(url, { signal: ctrl.signal });
+      clearTimeout(t);
+      const d    = await r.json();
+      const ip   = extract(d);
+      if (ip && (ip.includes('.') || ip.includes(':'))) {
+        // Sanitiza: substitui . e : por - para usar em URLs
+        return ip.replace(/[.:]/g, '-');
+      }
+    } catch { /* tenta próximo */ }
   }
-  return arr;
+  return null;
 }
 
-function copySyncCode() {
-  const code = encodeDone();
-  navigator.clipboard.writeText(code).then(() => {
-    const btn = document.getElementById('btn-copy');
-    btn.className = 'btn-copy copied';
-    btn.innerHTML = '<i class="ti ti-check"></i> Copiado!';
-    setTimeout(() => {
-      btn.className = 'btn-copy';
-      btn.innerHTML = '<i class="ti ti-copy"></i> Copiar';
-    }, 2000);
-  }).catch(() => {
-    // Fallback: seleciona o texto para o usuário copiar manualmente
-    const el = document.getElementById('sync-code-display');
-    const range = document.createRange();
-    range.selectNode(el);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-  });
+// ─── CLOUD READ (GET — sem preflight CORS) ────────────────────────────────────
+async function cloudRead(ip) {
+  const url = `https://www.jsonstore.io/${NS}/ip-${ip}`;
+  try {
+    const ctrl = new AbortController();
+    const t    = setTimeout(() => ctrl.abort(), 6000);
+    const r    = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(t);
+    const d = await r.json();
+    if (!d || !d.ok) return null;
+    // result pode ser um array ou uma string JSON (depende de como foi salvo)
+    let result = d.result;
+    if (typeof result === 'string') { try { result = JSON.parse(result); } catch {} }
+    return Array.isArray(result) ? result : null;
+  } catch { return null; }
 }
 
-function applySyncCode() {
-  const input = document.getElementById('sync-input');
-  const code = input.value.trim().toLowerCase();
-  const imported = decodeDone(code);
+// ─── CLOUD WRITE (3 estratégias em cascata) ───────────────────────────────────
+//
+//  Problema: POST com Content-Type: application/json dispara CORS preflight,
+//  e o browser bloqueia preflights de file:// para servidores externos.
+//
+//  Solução 1 — Sem Content-Type (body como texto puro):
+//    Quando fetch não recebe headers, o Content-Type é text/plain.
+//    text/plain é um "safe" CORS type → NÃO dispara preflight.
+//    O servidor recebe o JSON como string de texto.
+//
+//  Solução 2 — sendBeacon:
+//    API do browser para analytics. Envia POST em background.
+//    Não dispara preflight. body é text/plain.
+//
+//  Solução 3 — mode: no-cors:
+//    O request É enviado sem preflight.
+//    Não conseguimos ler a resposta, mas os dados chegam ao servidor.
+//
+async function cloudWrite(ip, arr) {
+  const url  = `https://www.jsonstore.io/${NS}/ip-${ip}`;
+  const body = JSON.stringify(arr);
 
-  if (!imported) {
-    input.style.borderColor = '#ef4444';
-    setTimeout(() => { input.style.borderColor = ''; }, 1500);
-    return;
+  // ── Estratégia 1: fetch sem Content-Type (text/plain, sem preflight) ────────
+  try {
+    const ctrl = new AbortController();
+    const t    = setTimeout(() => ctrl.abort(), 6000);
+    // NÃO passamos headers → Content-Type fica text/plain → sem CORS preflight
+    const r    = await fetch(url, { method: 'POST', body, signal: ctrl.signal });
+    clearTimeout(t);
+    if (r.ok || r.status === 200) {
+      try { const d = await r.json(); if (d.ok) return 'ok-fetch'; } catch {}
+      return 'ok-fetch'; // aceitamos resposta OK mesmo sem ler body
+    }
+  } catch {}
+
+  // ── Estratégia 2: sendBeacon (fire-and-forget, sem CORS) ────────────────────
+  try {
+    if (typeof navigator.sendBeacon === 'function') {
+      const sent = navigator.sendBeacon(url, body);
+      if (sent) return 'ok-beacon'; // enviado; não podemos verificar resposta
+    }
+  } catch {}
+
+  // ── Estratégia 3: no-cors (request enviado sem preflight, resposta opaca) ───
+  try {
+    const ctrl = new AbortController();
+    const t    = setTimeout(() => ctrl.abort(), 6000);
+    await fetch(url, { method: 'POST', mode: 'no-cors', body, signal: ctrl.signal });
+    clearTimeout(t);
+    return 'ok-nocors'; // presume sucesso; não conseguimos ler resposta
+  } catch {}
+
+  return null; // todas as estratégias falharam
+}
+
+// ─── SYNC PRINCIPAL ───────────────────────────────────────────────────────────
+async function runSync() {
+  setSyncUI('syncing', 'detectando rede...');
+
+  publicIP = await getPublicIP();
+  if (!publicIP) {
+    setSyncUI('offline', 'sem conexão');
+    return false;
   }
 
-  // Merge: progresso maior vence (nunca perde aulas marcadas)
-  let changed = false;
-  imported.forEach((v, i) => {
-    if (v > done[i]) { done[i] = v; changed = true; }
-  });
+  const ipReadable = publicIP.replace(/-/g, '.');
+  setSyncUI('syncing', 'sincronizando...');
 
-  if (changed) {
-    saveLocal();
-    render();
+  // Lê dados do cloud
+  const cloudData = await cloudRead(publicIP);
+
+  if (cloudData) {
+    // Merge: progresso maior vence (nunca perde aula marcada)
+    let changed = false;
+    cloudData.forEach((v, i) => {
+      if (i < done.length && (v||0) > done[i]) { done[i] = v; changed = true; }
+    });
+    if (changed) { saveLocal(); render(); }
+    setSyncUI('synced', `rede: ${ipReadable}`);
+    return true;
   }
 
-  input.value = '';
-  input.style.borderColor = '#16a34a';
-  input.placeholder = changed ? 'Progresso importado!' : 'Já estava atualizado.';
-  setTimeout(() => {
-    input.style.borderColor = '';
-    input.placeholder = 'Cole o código do outro dispositivo aqui...';
-  }, 2500);
+  // Nenhum dado no cloud: sobe os dados locais
+  const writeResult = await cloudWrite(publicIP, done);
+  if (writeResult) {
+    setSyncUI('synced', `rede: ${ipReadable}`);
+    return true;
+  }
+
+  setSyncUI('offline', 'só este dispositivo');
+  return false;
+}
+
+function retrySync() {
+  document.getElementById('btn-retry').className = 'btn-retry';
+  runSync();
+}
+
+// ─── SALVA NO CLOUD COM DEBOUNCE ──────────────────────────────────────────────
+let saveTimer = null;
+function scheduleSave() {
+  saveLocal();
+  if (!publicIP) return;
+  clearTimeout(saveTimer);
+  setSyncUI('syncing', 'salvando...');
+  saveTimer = setTimeout(async () => {
+    const r = await cloudWrite(publicIP, done);
+    const ipR = publicIP.replace(/-/g, '.');
+    setSyncUI(r ? 'synced' : 'offline', r ? `rede: ${ipR}` : 'só este dispositivo');
+    if (!r) document.getElementById('btn-retry').className = 'btn-retry show';
+  }, 800);
 }
 
 // ─── LÓGICA DO CRONOGRAMA ─────────────────────────────────────────────────────
@@ -374,16 +418,16 @@ function tot()  { return done.reduce((a, b) => a + b, 0); }
 function tog(i, j) {
   for (let k = 0; k < DAYS.length; k++) done[k] = Math.min(done[k], et(k));
   done[i] = (j <= done[i]) ? j - 1 : Math.min(j, et(i));
-  setSaveStatus('saving');
-  setTimeout(() => { saveLocal(); render(); }, 50);
+  scheduleSave();
+  render();
 }
 
 function chW(d) { week = Math.max(0, Math.min(4, week + d)); render(); }
 
 function confirmReset() {
-  if (!confirm('Resetar todo o progresso neste dispositivo?')) return;
+  if (!confirm('Resetar todo o progresso?\n(Apaga deste dispositivo e da nuvem)')) return;
   done = new Array(DAYS.length).fill(0);
-  saveLocal();
+  scheduleSave();
   render();
 }
 
@@ -399,17 +443,12 @@ function timesStr(d) {
 
 function render() {
   for (let i = 0; i < DAYS.length; i++) done[i] = Math.min(done[i], et(i));
-  const total = tot();
-  const pct   = Math.round(total / 127 * 100);
+  const total = tot(), pct = Math.round(total / 127 * 100);
 
   document.getElementById('sd').textContent = `${total}/127`;
   document.getElementById('sp').textContent = `${pct}%`;
   document.getElementById('pb').style.width = `${pct}%`;
 
-  // Atualiza sync code em tempo real
-  document.getElementById('sync-code-display').textContent = encodeDone();
-
-  // Dívida
   let debt = 0;
   for (let i = 0; i < DAYS.length; i++)
     if (done[i] > 0 && done[i] < DAYS[i].base) debt += DAYS[i].base - done[i];
@@ -427,7 +466,6 @@ function render() {
       `${debt} aula${debt>1?'s':''} em atraso — próximo dia recebeu slots extras automaticamente`;
   } else { bn.style.display = 'none'; }
 
-  // Semana
   const ws    = week * 7;
   const wdays = DAYS.slice(ws, Math.min(ws + 7, DAYS.length));
   document.getElementById('wh').textContent = week === 4 ? 'Semana Final' : `Semana ${week+1} de 5`;
@@ -436,7 +474,6 @@ function render() {
   document.getElementById('bp').disabled = week === 0;
   document.getElementById('bn').disabled = week === 4;
 
-  // Grid de dias
   const grid = document.getElementById('dg');
   grid.innerHTML = '';
   Array.from({ length: 7 }, (_, ci) =>
@@ -445,31 +482,24 @@ function render() {
     const cell = document.createElement('div');
     if (!item) { cell.className = 'dcard empty'; grid.appendChild(cell); return; }
     const { d, i } = item;
-    const nd    = done[i], eff = et(i), extra = cuFor(i);
-    const we     = d.dn === 'Sáb' || d.dn === 'Dom';
-    const allDone = nd >= d.base;
+    const nd = done[i], eff = et(i), extra = cuFor(i);
+    const we = d.dn === 'Sáb' || d.dn === 'Dom', allDone = nd >= d.base;
     let cls = 'dcard';
-    if (we)      cls += ' wknd';
-    if (allDone) cls += ' done-all';
-    if (i === 0) cls += ' today';
+    if (we) cls += ' wknd'; if (allDone) cls += ' done-all'; if (i === 0) cls += ' today';
     cell.className = cls;
-
     cell.innerHTML =
       `<div class="dname${allDone?' ok':''}">${d.dn}${we?'<span class="fds">FDS</span>':''}</div>` +
       `<div class="ddate">${fd(d.dt)}</div>`;
-
     const dots = document.createElement('div');
     dots.className = 'dots';
     for (let j = 1; j <= eff; j++) {
       const btn = document.createElement('button');
       btn.className = 'dot' + (j > d.base ? ' cu' : '') + (j <= nd ? ' on' : '');
-      btn.title = (j > d.base ? 'Aula extra' : `Aula ${d.ls+j-1}`) + (j <= nd ? ' (feita)' : '');
-      const ci=i, cj=j;
-      btn.onclick = () => tog(ci, cj);
+      btn.title = (j > d.base ? 'Aula extra' : `Aula ${d.ls+j-1}`) + (j<=nd?' (feita)':'');
+      const ci=i, cj=j; btn.onclick = () => tog(ci, cj);
       dots.appendChild(btn);
     }
     cell.appendChild(dots);
-
     const foot = document.createElement('div');
     foot.innerHTML =
       `<span class="dcount${allDone?' ok':''}">${nd}/${d.base}</span>` +
@@ -479,11 +509,10 @@ function render() {
     grid.appendChild(cell);
   });
 
-  // Recompensas
   const rg = document.getElementById('rg');
   rg.innerHTML = '';
   RWDS.forEach(r => {
-    const earned = total >= r.at;
+    const earned = tot() >= r.at;
     const div = document.createElement('div');
     div.className = 'rcard' + (earned ? ' on' : '');
     div.innerHTML =
@@ -494,10 +523,10 @@ function render() {
   });
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-loadLocal();
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+loadLocal();   // mostra dados locais imediatamente, sem esperar rede
 render();
-setSaveStatus('saved');
+runSync();     // inicia sync em background
 </script>
 </body>
 </html>
