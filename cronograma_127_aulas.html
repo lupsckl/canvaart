@@ -1,0 +1,215 @@
+
+<h2 class="sr-only">Cronograma interativo do curso de 127 aulas — marque aulas feitas e veja recompensas desbloqueadas.</h2>
+<div style="padding:0.75rem 0">
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+  <div>
+    <p style="font-size:16px;font-weight:500;margin:0;color:var(--color-text-primary)">Curso em 5 semanas</p>
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0">11 mai → 13 jun 2026</p>
+  </div>
+  <button onclick="resetAll()" style="font-size:11px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:4px"><i class="ti ti-refresh" aria-hidden="true" style="font-size:14px"></i>Resetar</button>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem">
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 2px">Feitas</p>
+    <p id="sd" style="font-size:22px;font-weight:500;margin:0;color:var(--color-text-primary)">0/127</p>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 2px">Status</p>
+    <p id="ss" style="font-size:14px;font-weight:500;margin:0;color:var(--color-text-success)">Em dia</p>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 2px">Término</p>
+    <p style="font-size:14px;font-weight:500;margin:0;color:var(--color-text-primary)">13 jun</p>
+  </div>
+</div>
+
+<div style="margin-bottom:1.5rem">
+  <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:5px">
+    <span>Progresso total</span><span id="sp" style="font-weight:500">0%</span>
+  </div>
+  <div style="height:10px;background:var(--color-background-secondary);border-radius:5px;overflow:hidden">
+    <div id="pb" style="height:100%;width:0%;background:#1D9E75;border-radius:5px;transition:width .4s ease"></div>
+  </div>
+  <div style="position:relative;height:16px;margin-top:3px;font-size:9px;color:var(--color-text-tertiary)">
+    <span style="position:absolute;left:calc(25/127*100% - 5px)">25</span>
+    <span style="position:absolute;left:calc(50/127*100% - 5px)">50</span>
+    <span style="position:absolute;left:calc(75/127*100% - 5px)">75</span>
+    <span style="position:absolute;left:calc(100/127*100% - 8px)">100</span>
+    <span style="position:absolute;right:0">127</span>
+  </div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+  <button id="bp" onclick="chW(-1)"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+  <div style="text-align:center">
+    <p id="wh" style="font-size:14px;font-weight:500;margin:0;color:var(--color-text-primary)"></p>
+    <p id="wdesc" style="font-size:11px;color:var(--color-text-secondary);margin:0"></p>
+  </div>
+  <button id="bn" onclick="chW(1)"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+</div>
+
+<div id="dbanner" style="display:none;background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:9px 12px;margin-bottom:10px;font-size:13px"></div>
+
+<div id="wg" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:1.5rem"></div>
+
+<div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem">
+  <p style="font-size:14px;font-weight:500;margin:0 0 12px;color:var(--color-text-primary)">Recompensas</p>
+  <div id="rg" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px"></div>
+</div>
+
+</div>
+
+<script>
+const SCHED=[
+  ['2026-05-11','Seg',3,['16:00','17:30','19:00']],
+  ['2026-05-12','Ter',2,['17:00','19:00']],
+  ['2026-05-13','Qua',4,['16:00','17:00','18:30','20:00']],
+  ['2026-05-14','Qui',2,['17:00','19:00']],
+  ['2026-05-15','Sex',3,['17:00','18:30','20:00']],
+  ['2026-05-16','Sáb',7,null],
+  ['2026-05-17','Dom',6,null],
+  ['2026-05-18','Seg',3,['16:00','17:30','19:00']],
+  ['2026-05-19','Ter',2,['17:00','19:00']],
+  ['2026-05-20','Qua',4,['16:00','17:00','18:30','20:00']],
+  ['2026-05-21','Qui',2,['17:00','19:00']],
+  ['2026-05-22','Sex',3,['17:00','18:30','20:00']],
+  ['2026-05-23','Sáb',7,null],
+  ['2026-05-24','Dom',6,null],
+  ['2026-05-25','Seg',3,['16:00','17:30','19:00']],
+  ['2026-05-26','Ter',2,['17:00','19:00']],
+  ['2026-05-27','Qua',4,['16:00','17:00','18:30','20:00']],
+  ['2026-05-28','Qui',2,['17:00','19:00']],
+  ['2026-05-29','Sex',3,['17:00','18:30','20:00']],
+  ['2026-05-30','Sáb',7,null],
+  ['2026-05-31','Dom',6,null],
+  ['2026-06-01','Seg',3,['16:00','17:30','19:00']],
+  ['2026-06-02','Ter',2,['17:00','19:00']],
+  ['2026-06-03','Qua',4,['16:00','17:00','18:30','20:00']],
+  ['2026-06-04','Qui',2,['17:00','19:00']],
+  ['2026-06-05','Sex',3,['17:00','18:30','20:00']],
+  ['2026-06-06','Sáb',7,null],
+  ['2026-06-07','Dom',6,null],
+  ['2026-06-08','Seg',3,['16:00','17:30','19:00']],
+  ['2026-06-09','Ter',2,['17:00','19:00']],
+  ['2026-06-10','Qua',4,['16:00','17:00','18:30','20:00']],
+  ['2026-06-11','Qui',2,['17:00','19:00']],
+  ['2026-06-12','Sex',3,['17:00','18:30','20:00']],
+  ['2026-06-13','Sáb',5,null]
+];
+
+let c2=0;
+const DAYS=SCHED.map(([dt,dn,base,times])=>{const ls=c2+1;c2+=base;return{dt,dn,base,times,ls};});
+
+const RWDS=[
+  {at:25,icon:'ti-ball-football',label:'Bola 30 min',desc:''},
+  {at:50,icon:'ti-ball-football',label:'Jogo completo',desc:''},
+  {at:75,icon:'ti-device-gamepad-2',label:'Game night',desc:''},
+  {at:100,icon:'ti-pizza',label:'Pizza + rolê',desc:''},
+  {at:127,icon:'ti-trophy',label:'Recompensa épica',desc:''},
+];
+
+let done=new Array(DAYS.length).fill(0);
+let week=0;
+
+function cuFor(i){
+  if(i===0)return 0;
+  const def=DAYS[i-1].base-done[i-1];
+  if(def<=0)return 0;
+  const we=DAYS[i].dn==='Sáb'||DAYS[i].dn==='Dom';
+  return Math.min(def,we?3:1);
+}
+function et(i){return DAYS[i].base+cuFor(i);}
+function tot(){return done.reduce((a,b)=>a+b,0);}
+
+function tog(i,j){
+  if(j<=done[i])done[i]=j-1;
+  else done[i]=Math.min(j,et(i));
+  render();
+}
+function chW(d){week=Math.max(0,Math.min(4,week+d));render();}
+function resetAll(){done=new Array(DAYS.length).fill(0);render();}
+
+function fd(dt){const p=dt.split('-');return`${+p[2]}/${+p[1]}`;}
+
+function tHtml(d){
+  if(!d.times)return`<p style="font-size:8px;color:var(--color-text-success);margin:2px 0 0">Dia livre</p>`;
+  const rows=[];
+  for(let t=0;t<d.times.length;t+=2)rows.push(d.times.slice(t,t+2).join(' '));
+  return`<p style="font-size:8px;color:var(--color-text-tertiary);margin:2px 0 0;line-height:1.5">${rows.join('<br>')}</p>`;
+}
+
+function render(){
+  for(let i=0;i<DAYS.length;i++)done[i]=Math.min(done[i],et(i));
+  const total=tot();
+  const pct=Math.round(total/127*100);
+  document.getElementById('sd').textContent=`${total}/127`;
+  document.getElementById('sp').textContent=`${pct}%`;
+  document.getElementById('pb').style.width=`${pct}%`;
+
+  let debt=0;
+  for(let i=0;i<DAYS.length;i++)if(done[i]>0&&done[i]<DAYS[i].base)debt+=DAYS[i].base-done[i];
+
+  const el=document.getElementById('ss');
+  if(total===127){el.style.color='var(--color-text-success)';el.textContent='Concluído!';}
+  else if(debt>0){el.style.color='var(--color-text-warning)';el.textContent=`${debt} atrasada${debt>1?'s':''}`;}
+  else{el.style.color='var(--color-text-success)';el.textContent='Em dia';}
+
+  const bn=document.getElementById('dbanner');
+  if(debt>0&&total<127){
+    bn.style.display='block';
+    bn.innerHTML=`<i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:14px;vertical-align:-2px;margin-right:6px"></i>${debt} aula${debt>1?'s':''} em atraso — próximo dia ganhou slots extras automaticamente`;
+  } else bn.style.display='none';
+
+  const ws=week*7;
+  const wdays=DAYS.slice(ws,Math.min(ws+7,DAYS.length));
+  document.getElementById('wh').textContent=week===4?'Semana final (última!)':`Semana ${week+1} de 5`;
+  if(wdays.length)document.getElementById('wdesc').textContent=`${fd(wdays[0].dt)} — ${fd(wdays[wdays.length-1].dt)}`;
+  document.getElementById('bp').disabled=week===0;
+  document.getElementById('bn').disabled=week===4;
+
+  const grid=document.getElementById('wg');
+  grid.innerHTML='';
+  Array.from({length:7},(_,ci)=>ci<wdays.length?{d:wdays[ci],i:ws+ci}:null).forEach(item=>{
+    const cell=document.createElement('div');
+    cell.style.cssText='border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 5px';
+    if(!item){grid.appendChild(cell);return;}
+    const{d,i}=item;
+    const nd=done[i],eff=et(i),extra=cuFor(i);
+    const we=d.dn==='Sáb'||d.dn==='Dom';
+    const allDone=nd>=d.base;
+    if(allDone)cell.style.borderColor='var(--color-border-success)';
+    if(i===0){cell.style.borderColor='#1D9E75';cell.style.borderWidth='1.5px';}
+    if(we)cell.style.background='var(--color-background-secondary)';
+    cell.innerHTML=`<p style="font-size:10px;font-weight:500;margin:0;color:${allDone?'var(--color-text-success)':'var(--color-text-primary)'}">${d.dn}${we?'<span style="font-size:8px;color:var(--color-text-success);margin-left:2px">FDS</span>':''}</p><p style="font-size:9px;color:var(--color-text-secondary);margin:0 0 5px">${fd(d.dt)}</p>`;
+    const dots=document.createElement('div');
+    dots.style.cssText='display:flex;flex-wrap:wrap;gap:2px;margin-bottom:3px';
+    for(let j=1;j<=eff;j++){
+      const dDone=j<=nd,isCU=j>d.base;
+      const btn=document.createElement('button');
+      btn.style.cssText=`width:12px;height:12px;border-radius:50%;padding:0;min-width:0;cursor:pointer;border:1.5px solid ${dDone?'#1D9E75':isCU?'#EF9F27':'var(--color-border-secondary)'};background:${dDone?'#1D9E75':'transparent'}`;
+      btn.setAttribute('aria-label',`${isCU?'Aula extra':`Aula ${d.ls+j-1}`}${dDone?' (feita)':''}`);
+      const ci=i,cj=j;btn.onclick=()=>tog(ci,cj);
+      dots.appendChild(btn);
+    }
+    cell.appendChild(dots);
+    const foot=document.createElement('div');
+    foot.innerHTML=`<span style="font-size:10px;font-weight:500;color:${allDone?'var(--color-text-success)':'var(--color-text-secondary)'}">${nd}/${d.base}</span>${extra>0?`<span style="font-size:9px;color:var(--color-text-warning);margin-left:3px">+${extra}</span>`:''}${tHtml(d)}`;
+    cell.appendChild(foot);
+    grid.appendChild(cell);
+  });
+
+  const rg=document.getElementById('rg');
+  rg.innerHTML='';
+  RWDS.forEach(r=>{
+    const earned=total>=r.at;
+    const div=document.createElement('div');
+    div.style.cssText=`background:${earned?'var(--color-background-success)':'var(--color-background-secondary)'};border:0.5px solid ${earned?'var(--color-border-success)':'var(--color-border-tertiary)'};border-radius:var(--border-radius-md);padding:10px 8px;transition:background .3s`;
+    div.innerHTML=`<i class="ti ${r.icon}" aria-hidden="true" style="font-size:20px;color:${earned?'var(--color-text-success)':'var(--color-text-tertiary)'}"></i><p style="font-size:12px;font-weight:500;margin:4px 0 1px;color:${earned?'var(--color-text-success)':'var(--color-text-primary)'}">${r.label}</p><p style="font-size:11px;color:var(--color-text-secondary);margin:0">${earned?'Desbloqueada!':r.at+' aulas'}</p>`;
+    rg.appendChild(div);
+  });
+}
+
+render();
+</script>
