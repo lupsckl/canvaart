@@ -1,68 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma — 127 Aulas</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh;padding:28px 16px}
+.wrap{max-width:920px;margin:0 auto}
 
-<h2 class="sr-only">Cronograma interativo do curso de 127 aulas — marque aulas feitas e veja recompensas desbloqueadas.</h2>
-<div style="padding:0.75rem 0">
+.header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:12px;flex-wrap:wrap}
+.header-left h1{font-size:22px;font-weight:700;color:#0f172a}
+.header-left p{font-size:13px;color:#64748b;margin-top:5px}
+.header-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
 
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-  <div>
-    <p style="font-size:16px;font-weight:500;margin:0;color:var(--color-text-primary)">Curso em 5 semanas</p>
-    <p style="font-size:12px;color:var(--color-text-secondary);margin:0">11 mai → 13 jun 2026</p>
+.sync-pill{display:flex;align-items:center;gap:6px;font-size:11px;padding:5px 11px;border-radius:20px;border:1px solid #e2e8f0;background:#fff;transition:all .3s;white-space:nowrap}
+.sync-pill.idle   {color:#94a3b8}
+.sync-pill.syncing{color:#3b82f6;border-color:#bfdbfe;background:#eff6ff}
+.sync-pill.synced {color:#16a34a;border-color:#bbf7d0;background:#f0fdf4}
+.sync-pill.offline{color:#d97706;border-color:#fde68a;background:#fffbeb}
+.sync-pill i{font-size:13px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .9s linear infinite;display:inline-block}
+
+.btn-reset{background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:7px 13px;font-size:12px;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
+.btn-reset:hover{border-color:#94a3b8;color:#334155}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.stat-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.stat-val{font-size:26px;font-weight:700;color:#0f172a;line-height:1}
+.stat-val.ok{color:#16a34a}
+.stat-val.warn{color:#d97706}
+.stat-val.sm{font-size:17px;padding-top:4px}
+
+.prog-card{background:#fff;border-radius:12px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.prog-row{display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:10px}
+.prog-row span:last-child{font-weight:600;color:#0f172a}
+.prog-track{height:13px;background:#f1f5f9;border-radius:7px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#15803d,#22c55e);border-radius:7px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+.ticks{display:flex;justify-content:space-between;font-size:9px;color:#cbd5e1;padding:0 1px}
+
+.week-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.nav-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#475569;transition:all .15s;box-shadow:0 1px 2px rgba(0,0,0,.06);font-size:18px}
+.nav-btn:hover:not(:disabled){border-color:#16a34a;color:#16a34a;background:#f0fdf4}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.wk-title{text-align:center}
+.wk-title h2{font-size:16px;font-weight:600;color:#0f172a}
+.wk-title p{font-size:12px;color:#94a3b8;margin-top:3px}
+
+.banner{display:none;background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#92400e;align-items:center;gap:8px}
+.banner i{font-size:16px;flex-shrink:0}
+
+.dgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:24px}
+.dcard{background:#fff;border-radius:10px;padding:10px 8px 9px;border:2px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.07);transition:border-color .2s,box-shadow .2s;min-height:112px}
+.dcard.wknd{background:#f0fdf4}
+.dcard.done-all{border-color:#16a34a}
+.dcard.today{border-color:#16a34a;box-shadow:0 0 0 4px rgba(22,163,74,.13)}
+.dcard.empty{background:transparent;box-shadow:none;border:none}
+.dname{font-size:11px;font-weight:600;color:#0f172a;line-height:1}
+.dname.ok{color:#16a34a}
+.fds{font-size:8px;color:#16a34a;font-weight:600;margin-left:3px;vertical-align:1px}
+.ddate{font-size:9px;color:#94a3b8;margin:2px 0 7px}
+.dots{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px}
+button.dot{width:14px;height:14px;border-radius:50%;border:2px solid #cbd5e1;background:transparent;cursor:pointer;padding:0;transition:all .15s}
+button.dot:hover{border-color:#16a34a;transform:scale(1.2)}
+button.dot.on{background:#16a34a;border-color:#16a34a}
+button.dot.cu{border-color:#f59e0b}
+button.dot.cu.on{background:#f59e0b;border-color:#f59e0b}
+.dcount{font-size:10px;font-weight:600;color:#94a3b8}
+.dcount.ok{color:#16a34a}
+.cu-tag{font-size:9px;color:#d97706;margin-left:3px}
+.dtimes{font-size:8px;color:#d1d5db;margin-top:3px;line-height:1.6}
+
+.rwds{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.rwds h3{font-size:15px;font-weight:600;color:#0f172a;margin-bottom:14px}
+.rwds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.rcard{border-radius:10px;padding:14px 10px;border:1.5px solid #f1f5f9;background:#f8fafc;text-align:center;transition:all .3s}
+.rcard.on{background:#f0fdf4;border-color:#86efac}
+.rcard i{font-size:26px;color:#e2e8f0;display:block;margin-bottom:6px;transition:color .3s}
+.rcard.on i{color:#16a34a}
+.rcard-name{font-size:12px;font-weight:600;color:#64748b;margin-bottom:3px}
+.rcard.on .rcard-name{color:#15803d}
+.rcard-sub{font-size:11px;color:#94a3b8}
+.rcard.on .rcard-sub{color:#16a34a;font-weight:500}
+
+.info-bar{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:#94a3b8;margin-top:20px;padding-bottom:8px;text-align:center}
+.info-bar i{font-size:13px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <div class="header-left">
+    <h1>Cronograma do Curso</h1>
+    <p>127 aulas &nbsp;·&nbsp; 11 mai → 13 jun 2026 &nbsp;·&nbsp; 5 semanas</p>
   </div>
-  <button onclick="resetAll()" style="font-size:11px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:4px"><i class="ti ti-refresh" aria-hidden="true" style="font-size:14px"></i>Resetar</button>
+  <div class="header-right">
+    <div class="sync-pill idle" id="sync-pill">
+      <i class="ti ti-cloud" id="sync-icon"></i>
+      <span id="sync-text">aguardando...</span>
+    </div>
+    <button class="btn-reset" onclick="confirmReset()">
+      <i class="ti ti-refresh"></i> Resetar
+    </button>
+  </div>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem">
-  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
-    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 2px">Feitas</p>
-    <p id="sd" style="font-size:22px;font-weight:500;margin:0;color:var(--color-text-primary)">0/127</p>
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Feitas</div>
+    <div id="sd" class="stat-val">0/127</div>
   </div>
-  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
-    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 2px">Status</p>
-    <p id="ss" style="font-size:14px;font-weight:500;margin:0;color:var(--color-text-success)">Em dia</p>
+  <div class="stat">
+    <div class="stat-label">Status</div>
+    <div id="ss" class="stat-val sm ok">Em dia</div>
   </div>
-  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
-    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 2px">Término</p>
-    <p style="font-size:14px;font-weight:500;margin:0;color:var(--color-text-primary)">13 jun</p>
-  </div>
-</div>
-
-<div style="margin-bottom:1.5rem">
-  <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:5px">
-    <span>Progresso total</span><span id="sp" style="font-weight:500">0%</span>
-  </div>
-  <div style="height:10px;background:var(--color-background-secondary);border-radius:5px;overflow:hidden">
-    <div id="pb" style="height:100%;width:0%;background:#1D9E75;border-radius:5px;transition:width .4s ease"></div>
-  </div>
-  <div style="position:relative;height:16px;margin-top:3px;font-size:9px;color:var(--color-text-tertiary)">
-    <span style="position:absolute;left:calc(25/127*100% - 5px)">25</span>
-    <span style="position:absolute;left:calc(50/127*100% - 5px)">50</span>
-    <span style="position:absolute;left:calc(75/127*100% - 5px)">75</span>
-    <span style="position:absolute;left:calc(100/127*100% - 8px)">100</span>
-    <span style="position:absolute;right:0">127</span>
+  <div class="stat">
+    <div class="stat-label">Término</div>
+    <div class="stat-val sm">13 jun</div>
   </div>
 </div>
 
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-  <button id="bp" onclick="chW(-1)"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-  <div style="text-align:center">
-    <p id="wh" style="font-size:14px;font-weight:500;margin:0;color:var(--color-text-primary)"></p>
-    <p id="wdesc" style="font-size:11px;color:var(--color-text-secondary);margin:0"></p>
+<div class="prog-card">
+  <div class="prog-row"><span>Progresso geral</span><span id="sp">0%</span></div>
+  <div class="prog-track"><div id="pb" class="prog-fill"></div></div>
+  <div class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span><span>127</span></div>
+</div>
+
+<div class="week-nav">
+  <button class="nav-btn" id="bp" onclick="chW(-1)"><i class="ti ti-chevron-left"></i></button>
+  <div class="wk-title">
+    <h2 id="wh"></h2>
+    <p id="wdesc"></p>
   </div>
-  <button id="bn" onclick="chW(1)"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+  <button class="nav-btn" id="bn" onclick="chW(1)"><i class="ti ti-chevron-right"></i></button>
 </div>
 
-<div id="dbanner" style="display:none;background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:9px 12px;margin-bottom:10px;font-size:13px"></div>
-
-<div id="wg" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:1.5rem"></div>
-
-<div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem">
-  <p style="font-size:14px;font-weight:500;margin:0 0 12px;color:var(--color-text-primary)">Recompensas</p>
-  <div id="rg" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px"></div>
+<div id="dbn" class="banner">
+  <i class="ti ti-alert-triangle"></i><span id="dbt"></span>
 </div>
 
+<div id="dg" class="dgrid"></div>
+
+<div class="rwds">
+  <h3>Recompensas</h3>
+  <div id="rg" class="rwds-grid"></div>
 </div>
+
+<div class="info-bar">
+  <i class="ti ti-info-circle"></i>
+  <span id="ip-info">Detectando IP da rede...</span>
+</div>
+
+</div><!-- .wrap -->
 
 <script>
-const SCHED=[
+// ─── NAMESPACE ÚNICO DESTE ARQUIVO ───────────────────────────────────────────
+// Chave de isolamento no cloud. NÃO mude depois de usar pela primeira vez.
+const NS = 'crono127-v1-xk9m2p7r';
+
+// ─── DADOS DO CRONOGRAMA ─────────────────────────────────────────────────────
+const SCHED = [
   ['2026-05-11','Seg',3,['16:00','17:30','19:00']],
   ['2026-05-12','Ter',2,['17:00','19:00']],
   ['2026-05-13','Qua',4,['16:00','17:00','18:30','20:00']],
@@ -96,120 +197,295 @@ const SCHED=[
   ['2026-06-10','Qua',4,['16:00','17:00','18:30','20:00']],
   ['2026-06-11','Qui',2,['17:00','19:00']],
   ['2026-06-12','Sex',3,['17:00','18:30','20:00']],
-  ['2026-06-13','Sáb',5,null]
+  ['2026-06-13','Sáb',5,null],
 ];
 
-let c2=0;
-const DAYS=SCHED.map(([dt,dn,base,times])=>{const ls=c2+1;c2+=base;return{dt,dn,base,times,ls};});
-
-const RWDS=[
-  {at:25,icon:'ti-ball-football',label:'Bola 30 min',desc:''},
-  {at:50,icon:'ti-ball-football',label:'Jogo completo',desc:''},
-  {at:75,icon:'ti-device-gamepad-2',label:'Game night',desc:''},
-  {at:100,icon:'ti-pizza',label:'Pizza + rolê',desc:''},
-  {at:127,icon:'ti-trophy',label:'Recompensa épica',desc:''},
+let c = 0;
+const DAYS = SCHED.map(([dt,dn,base,times]) => { const ls=c+1; c+=base; return {dt,dn,base,times,ls}; });
+const RWDS = [
+  {at:25,  icon:'ti-ball-football',   label:'Bola 30 min'},
+  {at:50,  icon:'ti-ball-football',   label:'Jogo completo'},
+  {at:75,  icon:'ti-device-gamepad-2',label:'Game night'},
+  {at:100, icon:'ti-pizza',           label:'Pizza + rolê'},
+  {at:127, icon:'ti-trophy',          label:'Recompensa épica'},
 ];
 
-let done=new Array(DAYS.length).fill(0);
-let week=0;
+// ─── ESTADO ───────────────────────────────────────────────────────────────────
+let done      = new Array(DAYS.length).fill(0);
+let week      = 0;
+let publicIP  = null;   // IP público sanitizado (ex: "189-28-43-100")
 
-function cuFor(i){
-  if(i===0)return 0;
-  const def=DAYS[i-1].base-done[i-1];
-  if(def<=0)return 0;
-  const we=DAYS[i].dn==='Sáb'||DAYS[i].dn==='Dom';
-  return Math.min(def,we?3:1);
+// ─── SYNC UI ──────────────────────────────────────────────────────────────────
+function setSyncUI(state, text) {
+  const pill = document.getElementById('sync-pill');
+  const icon = document.getElementById('sync-icon');
+  pill.className = 'sync-pill ' + state;
+  const iconClass = {
+    idle:    'ti ti-cloud',
+    syncing: 'ti ti-cloud-upload spin',
+    synced:  'ti ti-cloud-check',
+    offline: 'ti ti-cloud-off',
+  }[state] || 'ti ti-cloud';
+  icon.className = iconClass;
+  document.getElementById('sync-text').textContent = text;
 }
-function et(i){return DAYS[i].base+cuFor(i);}
-function tot(){return done.reduce((a,b)=>a+b,0);}
 
-function tog(i,j){
-  if(j<=done[i])done[i]=j-1;
-  else done[i]=Math.min(j,et(i));
+// ─── COOKIE (365 dias) ────────────────────────────────────────────────────────
+function setCookie(value) {
+  const exp = new Date();
+  exp.setFullYear(exp.getFullYear() + 1);
+  document.cookie = `crono127=${encodeURIComponent(value)};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+}
+function getCookie() {
+  const m = document.cookie.match(/(?:^|;\s*)crono127=([^;]*)/);
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+// ─── PERSISTÊNCIA LOCAL ───────────────────────────────────────────────────────
+function saveLocal() {
+  const json = JSON.stringify(done);
+  try { localStorage.setItem('crono127', json); } catch {}
+  setCookie(json);
+}
+
+function loadLocal() {
+  let raw = null;
+  try { raw = localStorage.getItem('crono127'); } catch {}
+  if (!raw) raw = getCookie();
+  if (!raw) return false;
+  try {
+    const arr = JSON.parse(raw);
+    if (Array.isArray(arr)) { arr.forEach((v,i) => { if (i < done.length) done[i] = v||0; }); return true; }
+  } catch {}
+  return false;
+}
+
+// ─── CLOUD SYNC (jsonstore.io + IP público como chave) ───────────────────────
+function cloudURL(ip) {
+  return `https://www.jsonstore.io/${NS}/ip-${ip}`;
+}
+
+async function fetchTimeout(url, opts, ms) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  try   { return await fetch(url, { ...opts, signal: ctrl.signal }); }
+  finally { clearTimeout(t); }
+}
+
+async function getPublicIP() {
+  try {
+    const r = await fetchTimeout('https://api64.ipify.org?format=json', {}, 5000);
+    const d = await r.json();
+    // Substitui . e : por - para usar como segmento de URL
+    return d.ip.replace(/[.:]/g, '-');
+  } catch { return null; }
+}
+
+async function cloudGet(ip) {
+  try {
+    const r = await fetchTimeout(cloudURL(ip), {}, 6000);
+    const d = await r.json();
+    return (d && d.ok && Array.isArray(d.result)) ? d.result : null;
+  } catch { return null; }
+}
+
+let saveTimer = null;
+function cloudPut(ip, arr) {
+  if (!ip) return;
+  clearTimeout(saveTimer);
+  setSyncUI('syncing', 'salvando...');
+  saveTimer = setTimeout(async () => {
+    try {
+      await fetchTimeout(cloudURL(ip), {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(arr),
+      }, 8000);
+      setSyncUI('synced', 'sincronizado');
+    } catch {
+      setSyncUI('offline', 'só local');
+    }
+  }, 900); // debounce: agrupa cliques rápidos numa única requisição
+}
+
+// ─── INICIALIZAÇÃO ────────────────────────────────────────────────────────────
+async function init() {
+  // 1. Carrega dados locais imediatamente (sem esperar rede)
+  loadLocal();
+  render();
+
+  // 2. Conecta ao cloud
+  setSyncUI('syncing', 'conectando...');
+  publicIP = await getPublicIP();
+
+  if (!publicIP) {
+    setSyncUI('offline', 'só local');
+    document.getElementById('ip-info').textContent =
+      'Sem conexão com internet — progresso salvo apenas neste dispositivo';
+    return;
+  }
+
+  // 3. Carrega dados do cloud e faz merge (mais progresso vence)
+  const cloud = await cloudGet(publicIP);
+  if (cloud) {
+    let updated = false;
+    cloud.forEach((v, i) => {
+      if (i < done.length && (v||0) > done[i]) { done[i] = v; updated = true; }
+    });
+    if (updated) { saveLocal(); render(); }
+    setSyncUI('synced', 'sincronizado');
+  } else {
+    // Primeira vez nesta rede: sobe dados locais para o cloud
+    cloudPut(publicIP, done);
+  }
+
+  const ipReadable = publicIP.replace(/-/g, '.');
+  document.getElementById('ip-info').textContent =
+    `IP da rede: ${ipReadable} — todos os dispositivos nesta rede Wi-Fi compartilham este progresso`;
+}
+
+// ─── LÓGICA DO CRONOGRAMA ────────────────────────────────────────────────────
+function cuFor(i) {
+  if (i === 0) return 0;
+  const deficit = DAYS[i-1].base - done[i-1];
+  if (deficit <= 0) return 0;
+  const isWE = DAYS[i].dn === 'Sáb' || DAYS[i].dn === 'Dom';
+  return Math.min(deficit, isWE ? 3 : 1);
+}
+function et(i)  { return DAYS[i].base + cuFor(i); }
+function tot()  { return done.reduce((a, b) => a + b, 0); }
+
+function tog(i, j) {
+  // Normaliza antes de alterar
+  for (let k = 0; k < DAYS.length; k++) done[k] = Math.min(done[k], et(k));
+  done[i] = (j <= done[i]) ? j - 1 : Math.min(j, et(i));
+  saveLocal();
+  cloudPut(publicIP, done);
   render();
 }
-function chW(d){week=Math.max(0,Math.min(4,week+d));render();}
-function resetAll(){done=new Array(DAYS.length).fill(0);render();}
 
-function fd(dt){const p=dt.split('-');return`${+p[2]}/${+p[1]}`;}
+function chW(d) { week = Math.max(0, Math.min(4, week + d)); render(); }
 
-function tHtml(d){
-  if(!d.times)return`<p style="font-size:8px;color:var(--color-text-success);margin:2px 0 0">Dia livre</p>`;
-  const rows=[];
-  for(let t=0;t<d.times.length;t+=2)rows.push(d.times.slice(t,t+2).join(' '));
-  return`<p style="font-size:8px;color:var(--color-text-tertiary);margin:2px 0 0;line-height:1.5">${rows.join('<br>')}</p>`;
+function confirmReset() {
+  if (!confirm('Resetar todo o progresso?\n\nIsso apaga tudo neste dispositivo e na nuvem (outros dispositivos na rede também serão zerados).')) return;
+  done = new Array(DAYS.length).fill(0);
+  saveLocal();
+  cloudPut(publicIP, done);
+  render();
 }
 
-function render(){
-  for(let i=0;i<DAYS.length;i++)done[i]=Math.min(done[i],et(i));
-  const total=tot();
-  const pct=Math.round(total/127*100);
-  document.getElementById('sd').textContent=`${total}/127`;
-  document.getElementById('sp').textContent=`${pct}%`;
-  document.getElementById('pb').style.width=`${pct}%`;
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function fd(dt) { const p = dt.split('-'); return `${+p[2]}/${+p[1]}`; }
 
-  let debt=0;
-  for(let i=0;i<DAYS.length;i++)if(done[i]>0&&done[i]<DAYS[i].base)debt+=DAYS[i].base-done[i];
+function timesStr(d) {
+  if (!d.times) return '<span style="color:#86efac">Dia livre</span>';
+  const rows = [];
+  for (let t = 0; t < d.times.length; t += 2) rows.push(d.times.slice(t, t+2).join(' '));
+  return rows.join('<br>');
+}
 
-  const el=document.getElementById('ss');
-  if(total===127){el.style.color='var(--color-text-success)';el.textContent='Concluído!';}
-  else if(debt>0){el.style.color='var(--color-text-warning)';el.textContent=`${debt} atrasada${debt>1?'s':''}`;}
-  else{el.style.color='var(--color-text-success)';el.textContent='Em dia';}
+function render() {
+  // Normaliza done contra targets atuais
+  for (let i = 0; i < DAYS.length; i++) done[i] = Math.min(done[i], et(i));
 
-  const bn=document.getElementById('dbanner');
-  if(debt>0&&total<127){
-    bn.style.display='block';
-    bn.innerHTML=`<i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:14px;vertical-align:-2px;margin-right:6px"></i>${debt} aula${debt>1?'s':''} em atraso — próximo dia ganhou slots extras automaticamente`;
-  } else bn.style.display='none';
+  const total = tot();
+  const pct   = Math.round(total / 127 * 100);
+  document.getElementById('sd').textContent = `${total}/127`;
+  document.getElementById('sp').textContent = `${pct}%`;
+  document.getElementById('pb').style.width = `${pct}%`;
 
-  const ws=week*7;
-  const wdays=DAYS.slice(ws,Math.min(ws+7,DAYS.length));
-  document.getElementById('wh').textContent=week===4?'Semana final (última!)':`Semana ${week+1} de 5`;
-  if(wdays.length)document.getElementById('wdesc').textContent=`${fd(wdays[0].dt)} — ${fd(wdays[wdays.length-1].dt)}`;
-  document.getElementById('bp').disabled=week===0;
-  document.getElementById('bn').disabled=week===4;
+  // Dívida de aulas
+  let debt = 0;
+  for (let i = 0; i < DAYS.length; i++)
+    if (done[i] > 0 && done[i] < DAYS[i].base) debt += DAYS[i].base - done[i];
 
-  const grid=document.getElementById('wg');
-  grid.innerHTML='';
-  Array.from({length:7},(_,ci)=>ci<wdays.length?{d:wdays[ci],i:ws+ci}:null).forEach(item=>{
-    const cell=document.createElement('div');
-    cell.style.cssText='border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 5px';
-    if(!item){grid.appendChild(cell);return;}
-    const{d,i}=item;
-    const nd=done[i],eff=et(i),extra=cuFor(i);
-    const we=d.dn==='Sáb'||d.dn==='Dom';
-    const allDone=nd>=d.base;
-    if(allDone)cell.style.borderColor='var(--color-border-success)';
-    if(i===0){cell.style.borderColor='#1D9E75';cell.style.borderWidth='1.5px';}
-    if(we)cell.style.background='var(--color-background-secondary)';
-    cell.innerHTML=`<p style="font-size:10px;font-weight:500;margin:0;color:${allDone?'var(--color-text-success)':'var(--color-text-primary)'}">${d.dn}${we?'<span style="font-size:8px;color:var(--color-text-success);margin-left:2px">FDS</span>':''}</p><p style="font-size:9px;color:var(--color-text-secondary);margin:0 0 5px">${fd(d.dt)}</p>`;
-    const dots=document.createElement('div');
-    dots.style.cssText='display:flex;flex-wrap:wrap;gap:2px;margin-bottom:3px';
-    for(let j=1;j<=eff;j++){
-      const dDone=j<=nd,isCU=j>d.base;
-      const btn=document.createElement('button');
-      btn.style.cssText=`width:12px;height:12px;border-radius:50%;padding:0;min-width:0;cursor:pointer;border:1.5px solid ${dDone?'#1D9E75':isCU?'#EF9F27':'var(--color-border-secondary)'};background:${dDone?'#1D9E75':'transparent'}`;
-      btn.setAttribute('aria-label',`${isCU?'Aula extra':`Aula ${d.ls+j-1}`}${dDone?' (feita)':''}`);
-      const ci=i,cj=j;btn.onclick=()=>tog(ci,cj);
+  const el = document.getElementById('ss');
+  el.className = 'stat-val sm';
+  if (total === 127)  { el.classList.add('ok');   el.textContent = 'Concluído!'; }
+  else if (debt > 0)  { el.classList.add('warn'); el.textContent = `${debt} atrasada${debt>1?'s':''}`; }
+  else                { el.classList.add('ok');   el.textContent = 'Em dia'; }
+
+  const bn = document.getElementById('dbn');
+  if (debt > 0 && total < 127) {
+    bn.style.display = 'flex';
+    document.getElementById('dbt').textContent =
+      `${debt} aula${debt>1?'s':''} em atraso — próximo dia recebeu slots extras automaticamente`;
+  } else { bn.style.display = 'none'; }
+
+  // Cabeçalho da semana
+  const ws    = week * 7;
+  const wdays = DAYS.slice(ws, Math.min(ws + 7, DAYS.length));
+  document.getElementById('wh').textContent = week === 4 ? 'Semana Final' : `Semana ${week+1} de 5`;
+  if (wdays.length)
+    document.getElementById('wdesc').textContent = `${fd(wdays[0].dt)} — ${fd(wdays[wdays.length-1].dt)}`;
+  document.getElementById('bp').disabled = week === 0;
+  document.getElementById('bn').disabled = week === 4;
+
+  // Grid de dias
+  const grid = document.getElementById('dg');
+  grid.innerHTML = '';
+  Array.from({ length: 7 }, (_, ci) =>
+    ci < wdays.length ? { d: wdays[ci], i: ws + ci } : null
+  ).forEach(item => {
+    const cell = document.createElement('div');
+    if (!item) { cell.className = 'dcard empty'; grid.appendChild(cell); return; }
+
+    const { d, i } = item;
+    const nd    = done[i];
+    const eff   = et(i);
+    const extra = cuFor(i);
+    const we     = d.dn === 'Sáb' || d.dn === 'Dom';
+    const allDone = nd >= d.base;
+
+    let cls = 'dcard';
+    if (we)      cls += ' wknd';
+    if (allDone) cls += ' done-all';
+    if (i === 0) cls += ' today';
+    cell.className = cls;
+
+    cell.innerHTML =
+      `<div class="dname${allDone?' ok':''}">${d.dn}${we?'<span class="fds">FDS</span>':''}</div>` +
+      `<div class="ddate">${fd(d.dt)}</div>`;
+
+    const dots = document.createElement('div');
+    dots.className = 'dots';
+    for (let j = 1; j <= eff; j++) {
+      const btn    = document.createElement('button');
+      const isDone = j <= nd, isCU = j > d.base;
+      btn.className = 'dot' + (isCU?' cu':'') + (isDone?' on':'');
+      btn.title = (isCU ? 'Aula extra' : `Aula ${d.ls+j-1}`) + (isDone?' (feita)':'');
+      const ci=i, cj=j;
+      btn.onclick = () => tog(ci, cj);
       dots.appendChild(btn);
     }
     cell.appendChild(dots);
-    const foot=document.createElement('div');
-    foot.innerHTML=`<span style="font-size:10px;font-weight:500;color:${allDone?'var(--color-text-success)':'var(--color-text-secondary)'}">${nd}/${d.base}</span>${extra>0?`<span style="font-size:9px;color:var(--color-text-warning);margin-left:3px">+${extra}</span>`:''}${tHtml(d)}`;
+
+    const foot = document.createElement('div');
+    foot.innerHTML =
+      `<span class="dcount${allDone?' ok':''}">${nd}/${d.base}</span>` +
+      (extra > 0 ? `<span class="cu-tag">+${extra}</span>` : '') +
+      `<div class="dtimes">${timesStr(d)}</div>`;
     cell.appendChild(foot);
     grid.appendChild(cell);
   });
 
-  const rg=document.getElementById('rg');
-  rg.innerHTML='';
-  RWDS.forEach(r=>{
-    const earned=total>=r.at;
-    const div=document.createElement('div');
-    div.style.cssText=`background:${earned?'var(--color-background-success)':'var(--color-background-secondary)'};border:0.5px solid ${earned?'var(--color-border-success)':'var(--color-border-tertiary)'};border-radius:var(--border-radius-md);padding:10px 8px;transition:background .3s`;
-    div.innerHTML=`<i class="ti ${r.icon}" aria-hidden="true" style="font-size:20px;color:${earned?'var(--color-text-success)':'var(--color-text-tertiary)'}"></i><p style="font-size:12px;font-weight:500;margin:4px 0 1px;color:${earned?'var(--color-text-success)':'var(--color-text-primary)'}">${r.label}</p><p style="font-size:11px;color:var(--color-text-secondary);margin:0">${earned?'Desbloqueada!':r.at+' aulas'}</p>`;
+  // Recompensas
+  const rg = document.getElementById('rg');
+  rg.innerHTML = '';
+  RWDS.forEach(r => {
+    const earned = total >= r.at;
+    const div = document.createElement('div');
+    div.className = 'rcard' + (earned ? ' on' : '');
+    div.innerHTML =
+      `<i class="ti ${r.icon}"></i>` +
+      `<div class="rcard-name">${r.label}</div>` +
+      `<div class="rcard-sub">${earned ? 'Desbloqueada!' : r.at+' aulas'}</div>`;
     rg.appendChild(div);
   });
 }
 
-render();
+// ─── START ────────────────────────────────────────────────────────────────────
+init();
 </script>
+</body>
+</html>
